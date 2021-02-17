@@ -1,4 +1,6 @@
 from flask import Flask, Response
+import pathlib as path
+import requests
 
 app = Flask(__name__)
 
@@ -18,17 +20,34 @@ def read_words():
 
 @app.route('/voice/<word>')
 def stream_mp3(word):
+    # cache_path = f'../data_file/media/{word}.mp3'
+
+    cache_path = f'/Users/miracle/workspace/PyCharm/dictation-web-data/data_file/media/{word}.mp3'
+    cache_word(word, cache_path)
+
     def generate():
-        # path = f'https://ssl.gstatic.com/dictionary/static/sounds/oxford/apple--_gb_1.mp3' us代表Uncle Sam “gb”代表Great Britain
-        path = f'https://ssl.gstatic.com/dictionary/static/sounds/oxford/{word}--_gb_1.mp3'
-        # path = f'./data_file/media/{word}.mp3'
-        with open(path, 'rb') as fmp3:
+        with open(cache_path, 'rb') as fmp3:
             data = fmp3.read(1024)
             while data:
                 yield data
                 data = fmp3.read(1024)
 
     return Response(generate(), mimetype="audio/mpeg3")
+
+
+def cache_word(word, cache_path):
+    cache_path = path.Path(cache_path)
+    # cache_path.mkdir(parents=True)
+    if cache_path.exists():
+        return
+
+    # us代表Uncle Sam “gb”代表Great Britain
+    # url = f'https://ssl.gstatic.com/dictionary/static/sounds/oxford/apple--_us_1.mp3'
+    url = f'https://ssl.gstatic.com/dictionary/static/sounds/oxford/{word}--_gb_1.mp3'
+    res = requests.get(url)
+    with open(cache_path, 'ab') as file:
+        file.write(res.content)
+        file.flush()
 
 
 if __name__ == '__main__':
