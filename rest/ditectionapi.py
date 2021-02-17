@@ -45,7 +45,7 @@ def cache_word(word, cache_path):
     # url = f'https://ssl.gstatic.com/dictionary/static/sounds/oxford/apple--_us_1.mp3'
     url = f'https://ssl.gstatic.com/dictionary/static/sounds/oxford/{word}--_gb_1.mp3'
     res = requests.get(url)
-    with open(cache_path, 'ab') as file:
+    with open(cache_path, 'wb') as file:
         file.write(res.content)
         file.flush()
 
