@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "word": "apple",
+    "translation": "苹果",
+    "pronouncation": "/media/apple.mp3"
+  },
+  {
+    "id": 2,
+    "word": "orange",
+    "translation": "桔子",
+    "pronouncation": "/media/orange.mp3"
+  }
+]
